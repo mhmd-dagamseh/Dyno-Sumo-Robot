@@ -1,0 +1,1643 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>روبوت سومو دينو - توثيق مشروع الأردوينو</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --gray: #7f8c8d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a2980, #26d0ce);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--accent), var(--secondary));
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .tagline {
+            color: var(--gray);
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .project-meta {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .meta-item {
+            background: var(--light);
+            padding: 10px 20px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .meta-item i {
+            color: var(--secondary);
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 992px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-title {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-title i {
+            color: var(--secondary);
+        }
+
+        .component-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .component-item {
+            background: var(--light);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--secondary);
+            transition: all 0.3s;
+        }
+
+        .component-item:hover {
+            background: #e8f4fc;
+            transform: translateX(5px);
+        }
+
+        .component-name {
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .component-desc {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin: 15px 0;
+            position: relative;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #4a5568;
+        }
+
+        .code-language {
+            background: var(--secondary);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .code-copy {
+            background: #4a5568;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: background 0.3s;
+        }
+
+        .code-copy:hover {
+            background: var(--accent);
+        }
+
+        .pin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        .pin-table th, .pin-table td {
+            padding: 12px 15px;
+            text-align: right;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .pin-table th {
+            background: var(--light);
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .pin-table tr:hover {
+            background: #f5f9ff;
+        }
+
+        .pin-number {
+            background: var(--secondary);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .behavior-diagram {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .behavior-step {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid var(--success);
+        }
+
+        .step-number {
+            background: var(--success);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .behavior-info h4 {
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .behavior-info p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .sensor-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .sensor {
+            width: 100px;
+            height: 100px;
+            background: var(--light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+
+        .sensor.active {
+            background: #d4edda;
+            box-shadow: 0 0 15px rgba(40, 167, 69, 0.5);
+        }
+
+        .sensor-name {
+            font-weight: bold;
+            color: var(--primary);
+            margin-top: 5px;
+        }
+
+        .sensor-distance {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .robot-center {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .motor-control {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 20px 0;
+        }
+
+        .motor {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .motor-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--secondary);
+        }
+
+        .motor.active .motor-icon {
+            background: var(--secondary);
+            color: white;
+            animation: rotate 1s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .motor-name {
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .motor-speed {
+            background: var(--light);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid var(--light);
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 12px 25px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--gray);
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .tab.active {
+            color: var(--secondary);
+        }
+
+        .tab.active::after {
+            content: "";
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--secondary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .download-section {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .download-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 25px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .download-btn:hover {
+            background: var(--secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .download-btn i {
+            font-size: 1.2rem;
+        }
+
+        .simulation-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .sim-btn {
+            padding: 10px 20px;
+            background: var(--light);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--primary);
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sim-btn:hover {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .sim-btn.active {
+            background: var(--secondary);
+            color: white;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            margin-top: 50px;
+            color: white;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #ff7e5f, #feb47b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            color: #856404;
+            border-left: 4px solid #ffc107;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border-left: 4px solid #28a745;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border-left: 4px solid #17a2b8;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-robot"></i> روبوت السومو "دينو"</h1>
+            <p class="tagline">روبوت مستقل للمنافسة في مسابقات السومو - مشروع متكامل بالأردوينو</p>
+            
+            <div class="project-meta">
+                <div class="meta-item">
+                    <i class="fas fa-microchip"></i>
+                    <span>المتحكم: Arduino Uno R3</span>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-sensor"></i>
+                    <span>3 × حساسات HC-SR04</span>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-cogs"></i>
+                    <span>محركان L293D</span>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-battery-full"></i>
+                    <span>بطارية 9V</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <!-- الجزء الأيسر: معلومات المشروع -->
+            <div class="left-column">
+                <div class="card">
+                    <h2 class="card-title"><i class="fas fa-info-circle"></i> نظرة عامة على المشروع</h2>
+                    <p>روبوت "دينو" هو روبوت سومو ذاتي الحركة مصمم للمنافسة في حلبات السومو. يعتمد على ثلاثة حساسات للمسافة لتحديد موقع الخصم واتخاذ القرارات التكتيكية المناسبة.</p>
+                    
+                    <div class="alert alert-info">
+                        <i class="fas fa-lightbulb"></i>
+                        <div>
+                            <strong>فكرة المشروع:</strong> تصميم روبوت صغير الحجم قادر على دفع الخصم خارج حلبة السومو باستخدام استراتيجيات هجوم ودفاع ذكية.
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <div>
+                            <strong>ملاحظة هامة:</strong> ملف التصميم (.brd) يحتاج إلى <span class="highlight">توجيه المسارات (Routing)</span> قبل إرساله للتصنيع.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2 class="card-title"><i class="fas fa-cube"></i> قائمة المكونات (BOM)</h2>
+                    <div class="component-grid">
+                        <div class="component-item">
+                            <div class="component-name">Arduino Uno R3</div>
+                            <div class="component-desc">المتحكم الدقيق الأساسي</div>
+                        </div>
+                        <div class="component-item">
+                            <div class="component-name">HC-SR04 (3 قطع)</div>
+                            <div class="component-desc">حساس المسافة بالموجات فوق الصوتية</div>
+                        </div>
+                        <div class="component-item">
+                            <div class="component-name">L293D</div>
+                            <div class="component-desc">سائق المحركات (H-Bridge)</div>
+                        </div>
+                        <div class="component-item">
+                            <div class="component-name">محركان تروس</div>
+                            <div class="component-desc">محرك 6V، 100 دورة/دقيقة</div>
+                        </div>
+                        <div class="component-item">
+                            <div class="component-name">بطارية 9V</div>
+                            <div class="component-desc">مصدر الطاقة الرئيسي</div>
+                        </div>
+                        <div class="component-item">
+                            <div class="component-name">لوحة التجارب</div>
+                            <div class="component-desc">لتوصيل الدوائر</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2 class="card-title"><i class="fas fa-project-diagram"></i> مخطط التوصيلات</h2>
+                    
+                    <div class="tabs">
+                        <button class="tab active" onclick="switchTab('pins')">دبابيس الأردوينو</button>
+                        <button class="tab" onclick="switchTab('sensors')">الحساسات</button>
+                        <button class="tab" onclick="switchTab('motors')">المحركات</button>
+                    </div>
+                    
+                    <div id="pins" class="tab-content active">
+                        <table class="pin-table">
+                            <thead>
+                                <tr>
+                                    <th>الدبوس</th>
+                                    <th>الوظيفة</th>
+                                    <th>المتصل مع</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="pin-number">D2</span></td>
+                                    <td>توجيه المحرك الأيسر</td>
+                                    <td>L293D (IN1)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="pin-number">D3</span></td>
+                                    <td>تمكين المحرك الأيسر</td>
+                                    <td>L293D (EN1)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="pin-number">D4</span></td>
+                                    <td>عكس المحرك الأيسر</td>
+                                    <td>L293D (IN2)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="pin-number">D5</span></td>
+                                    <td>صدى الحساس الأيسر</td>
+                                    <td>HC-SR04 (ECHO)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="pin-number">D6</span></td>
+                                    <td>صدى الحساس الأيمن</td>
+                                    <td>HC-SR04 (ECHO)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="pin-number">D7</span></td>
+                                    <td>إطلاق الحساس الأيسر</td>
+                                    <td>HC-SR04 (TRIG)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="pin-number">D8</span></td>
+                                    <td>إطلاق الحساس الأيمن</td>
+                                    <td>HC-SR04 (TRIG)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div id="sensors" class="tab-content">
+                        <div class="sensor-visual">
+                            <div class="sensor" id="left-sensor">
+                                <i class="fas fa-satellite-dish"></i>
+                                <div class="sensor-name">يسار</div>
+                                <div class="sensor-distance" id="left-distance">-- سم</div>
+                            </div>
+                            
+                            <div class="robot-center">
+                                <i class="fas fa-robot"></i>
+                                <div>دينو</div>
+                            </div>
+                            
+                            <div class="sensor" id="right-sensor">
+                                <i class="fas fa-satellite-dish"></i>
+                                <div class="sensor-name">يمين</div>
+                                <div class="sensor-distance" id="right-distance">-- سم</div>
+                            </div>
+                        </div>
+                        
+                        <div class="sensor" id="center-sensor" style="margin: 0 auto; width: 120px; height: 120px;">
+                            <i class="fas fa-bullseye"></i>
+                            <div class="sensor-name">أمام</div>
+                            <div class="sensor-distance" id="center-distance">-- سم</div>
+                        </div>
+                        
+                        <div class="simulation-controls">
+                            <button class="sim-btn" onclick="simulateSensor('left')">
+                                <i class="fas fa-eye"></i> محاكاة يسار
+                            </button>
+                            <button class="sim-btn" onclick="simulateSensor('center')">
+                                <i class="fas fa-bullseye"></i> محاكاة أمام
+                            </button>
+                            <button class="sim-btn" onclick="simulateSensor('right')">
+                                <i class="fas fa-eye"></i> محاكاة يمين
+                            </button>
+                            <button class="sim-btn" onclick="resetSensors()">
+                                <i class="fas fa-redo"></i> إعادة تعيين
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="motors" class="tab-content">
+                        <div class="motor-control">
+                            <div class="motor" id="left-motor">
+                                <div class="motor-icon">
+                                    <i class="fas fa-cog"></i>
+                                </div>
+                                <div class="motor-name">المحرك الأيسر</div>
+                                <div class="motor-speed">السرعة: <span id="left-speed">0</span></div>
+                            </div>
+                            
+                            <div class="motor" id="right-motor">
+                                <div class="motor-icon">
+                                    <i class="fas fa-cog"></i>
+                                </div>
+                                <div class="motor-name">المحرك الأيمن</div>
+                                <div class="motor-speed">السرعة: <span id="right-speed">0</span></div>
+                            </div>
+                        </div>
+                        
+                        <div class="simulation-controls">
+                            <button class="sim-btn" onclick="controlMotor('forward')">
+                                <i class="fas fa-arrow-up"></i> للأمام
+                            </button>
+                            <button class="sim-btn" onclick="controlMotor('backward')">
+                                <i class="fas fa-arrow-down"></i> للخلف
+                            </button>
+                            <button class="sim-btn" onclick="controlMotor('left')">
+                                <i class="fas fa-undo"></i> لليسار
+                            </button>
+                            <button class="sim-btn" onclick="controlMotor('right')">
+                                <i class="fas fa-redo"></i> لليمين
+                            </button>
+                            <button class="sim-btn" onclick="controlMotor('stop')">
+                                <i class="fas fa-stop"></i> إيقاف
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- الجزء الأيمن: الكود والتفاصيل الفنية -->
+            <div class="right-column">
+                <div class="card">
+                    <h2 class="card-title"><i class="fas fa-code"></i> خوارزميات القيادة</h2>
+                    
+                    <div class="behavior-diagram">
+                        <div class="behavior-step">
+                            <div class="step-number">1</div>
+                            <div class="behavior-info">
+                                <h4>البحث (Search)</h4>
+                                <p>عندما لا يتم اكتشاف أي خصم، يقوم الروبوت بالدوران والحركة العشوائية للبحث عن الخصم.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="behavior-step">
+                            <div class="step-number">2</div>
+                            <div class="behavior-info">
+                                <h4>المحاذاة (Align)</h4>
+                                <p>عند اكتشاف الخصم على الجانب، يقوم الروبوت بمحاذاة نفسه تجاه الخصم قبل الهجوم.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="behavior-step">
+                            <div class="step-number">3</div>
+                            <div class="behavior-info">
+                                <h4>الهجوم (Attack)</h4>
+                                <p>عندما يكون الخصم في المدى الأمامي، يهاجم الروبوت بأقصى سرعة لدفع الخصم خارج الحلبة.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="behavior-step">
+                            <div class="step-number">4</div>
+                            <div class="behavior-info">
+                                <h4>التهرب (Evade)</h4>
+                                <p>عند اقتراب الخصم كثيرًا، يتراجع الروبوت ويغير موقعه لتجنب الدفع.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="behavior-step">
+                            <div class="step-number">5</div>
+                            <div class="behavior-info">
+                                <h4>الهجوم المضاد (Counter)</h4>
+                                <p>بعد التهرب مباشرة، يقوم الروبوت بهجوم مضاد مفاجئ على الخصم.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2 class="card-title"><i class="fas fa-file-code"></i> عينة من الكود البرمجي</h2>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <div class="code-language">Arduino C++</div>
+                            <button class="code-copy" onclick="copyCode()">
+                                <i class="fas fa-copy"></i> نسخ الكود
+                            </button>
+                        </div>
+                        <pre id="code-sample">// Dyno Sumo Robot - Main Decision Function
+void makeDecision(float left, float center, float right) {
+  // إذا كان الخصم قريبًا جدًا (خطير)
+  if (center < DIST_DANGER || left < DIST_DANGER || right < DIST_DANGER) {
+    behaviorEvade();
+    return;
+  }
+  
+  // إذا كان الخصم يقترب بسرعة عالية
+  if (center < DIST_CLOSE && opponentSpeed < -80) {
+    behaviorTactical();
+    return;
+  }
+  
+  // إذا كان الخصم في مدى الهجوم الأمامي
+  if (center > DIST_DANGER && center < DIST_ATTACK) {
+    behaviorAttack();
+    return;
+  }
+  
+  // إذا كان الخصم على الجانب
+  if ((left < DIST_ALIGN || right < DIST_ALIGN) && center > DIST_ATTACK) {
+    behaviorAlign();
+    return;
+  }
+  
+  // الهجوم المضاد بعد التهرب
+  if (millis() - evadeTimer < TIME_COUNTER && millis() - evadeTimer > 100) {
+    behaviorCounter();
+    return;
+  }
+  
+  // إذا لم يتم تطابق أي حالة، البحث عن الخصم
+  behaviorSearch();
+}</pre>
+                    </div>
+                    
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <strong>الكود جاهز للرفع:</strong> يمكنك نسخ الكود الكامل من أدناه ورفعه مباشرة إلى الأردوينو.
+                        </div>
+                    </div>
+                    
+                    <button class="sim-btn" style="width: 100%; margin-top: 15px;" onclick="showFullCode()">
+                        <i class="fas fa-file-code"></i> عرض الكود البرمجي الكامل
+                    </button>
+                </div>
+
+                <div class="card">
+                    <h2 class="card-title"><i class="fas fa-download"></i> ملفات المشروع</h2>
+                    
+                    <div class="download-section">
+                        <a href="#" class="download-btn" onclick="downloadFile('code')">
+                            <i class="fas fa-file-code"></i>
+                            <div>
+                                <div>كود الأردوينو</div>
+                                <small>Dyno_Robot.ino</small>
+                            </div>
+                        </a>
+                        
+                        <a href="#" class="download-btn" onclick="downloadFile('bom')">
+                            <i class="fas fa-clipboard-list"></i>
+                            <div>
+                                <div>قائمة المكونات</div>
+                                <small>bom.csv</small>
+                            </div>
+                        </a>
+                        
+                        <a href="#" class="download-btn" onclick="downloadFile('schematic')">
+                            <i class="fas fa-project-diagram"></i>
+                            <div>
+                                <div>مخطط الدائرة</div>
+                                <small>Dyno_Robot.brd</small>
+                            </div>
+                        </a>
+                    </div>
+                    
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <div>
+                            <strong>ملاحظة:</strong> ملف .brd يحتاج إلى فتحه في برنامج Autodesk EAGLE لعرض التصميم الكامل للوحة الدوائر.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <div class="logo">Dyno Robot</div>
+            <p>مشروع روبوت السومو - توثيق تقني شامل</p>
+            <p>تم التطوير باستخدام Arduino، C++، و Autodesk EAGLE</p>
+            <p style="margin-top: 20px; font-size: 0.9rem; opacity: 0.8;">© 2023 - مشروع تعليمي لتوثيق مشاريع الأردوينو</p>
+        </footer>
+    </div>
+
+    <!-- نافذة عرض الكود الكامل -->
+    <div id="code-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center;">
+        <div style="background: white; width: 90%; max-width: 800px; height: 80%; border-radius: 15px; padding: 20px; display: flex; flex-direction: column;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h3 style="color: var(--primary);">الكود البرمجي الكامل لروبوت دينو</h3>
+                <button onclick="closeFullCode()" style="background: var(--accent); color: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 1.2rem;">×</button>
+            </div>
+            <div style="flex: 1; overflow: auto; background: #2d3748; color: #e2e8f0; padding: 20px; border-radius: 10px; font-family: 'Courier New', monospace; font-size: 0.9rem;">
+                <pre id="full-code-content"></pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // الكود البرمجي الكامل
+        const fullCode = `// Dyno Sumo Robot - Complete Code
+
+// ====================== SENSOR PINS ======================
+byte TRIG_RIGHT = 8;
+byte ECHO_RIGHT = 6;
+byte TRIG_LEFT = 7;
+byte ECHO_LEFT = 5;
+byte TRIG_CENTER = 9;
+byte ECHO_CENTER = 10;
+
+// ====================== MOTOR PINS (L298N) ======================
+byte M1_ENABLE = 3;
+byte M1_FORWARD = 2;
+byte M1_BACKWARD = 4;
+
+byte M2_ENABLE = 11;
+byte M2_FORWARD = 13;
+byte M2_BACKWARD = 12;
+
+// ====================== SPEEDS ======================
+byte SPEED_NORMAL = 170;
+byte SPEED_ATTACK = 240;
+byte SPEED_MAX = 255;
+byte SPEED_TURN = 190;
+byte SPEED_SEARCH = 140;
+byte SPEED_EVADE = 220;
+
+// ====================== DISTANCES ======================
+byte DIST_DANGER = 10;
+byte DIST_CLOSE = 18;
+byte DIST_ATTACK = 35;
+byte DIST_ALIGN = 55;
+byte DIST_FAR = 100;
+byte DIST_LOST = 150;
+
+// ====================== TIMINGS ======================
+int TIME_ATTACK = 400;
+int TIME_EVADE = 250;
+int TIME_SEARCH_CHANGE = 1200;
+int TIME_COUNTER = 300;
+
+// ====================== FUNCTION PROTOTYPES ======================
+void motorLeft(int speed, bool forward);
+void motorRight(int speed, bool forward);
+void forwardMove(int speed);
+void backwardMove(int speed);
+void turnRight(int speed);
+void turnLeft(int speed);
+void pivotRight();
+void pivotLeft();
+void stopMotors();
+float readSensor(int trigPin, int echoPin);
+void readAllSensors(float &left, float &center, float &right);
+void analyzeOpponent(float left, float center, float right);
+void behaviorSearch();
+void behaviorAlign();
+void behaviorAttack();
+void behaviorTactical();
+void behaviorEvade();
+void behaviorCounter();
+void makeDecision(float left, float center, float right);
+void testMotors();
+
+// ====================== SYSTEM VARIABLES ======================
+unsigned long loopTimer = 0;
+unsigned long searchTimer = 0;
+unsigned long attackTimer = 0;
+unsigned long evadeTimer = 0;
+unsigned long lostTimer = 0;
+
+int opponentSide = 0;
+int lastOpponentSide = 0;
+float opponentDistance = 0;
+float opponentSpeed = 0;
+
+int searchPattern = 0;
+int attackPattern = 0;
+int evadePattern = 0;
+
+bool opponentFound = false;
+bool opponentClose = false;
+bool opponentVeryClose = false;
+
+// ====================== SETUP ======================
+void setup() {
+  // MOTOR PINS
+  pinMode(M1_ENABLE, OUTPUT);
+  pinMode(M1_FORWARD, OUTPUT);
+  pinMode(M1_BACKWARD, OUTPUT);
+  pinMode(M2_ENABLE, OUTPUT);
+  pinMode(M2_FORWARD, OUTPUT);
+  pinMode(M2_BACKWARD, OUTPUT);
+  
+  // SENSOR PINS
+  pinMode(TRIG_RIGHT, OUTPUT);
+  pinMode(ECHO_RIGHT, INPUT);
+  pinMode(TRIG_LEFT, OUTPUT);
+  pinMode(ECHO_LEFT, INPUT);
+  pinMode(TRIG_CENTER, OUTPUT);
+  pinMode(ECHO_CENTER, INPUT);
+  
+  // SERIAL
+  Serial.begin(9600);
+  Serial.println("SUMO ROBOT - FULL AUTOMATION");
+  
+  // MOTOR TEST
+  testMotors();
+}
+
+// ====================== MOTOR TEST ======================
+void testMotors() {
+  forwardMove(150);
+  delay(300);
+  backwardMove(150);
+  delay(300);
+  turnRight(180);
+  delay(300);
+  turnLeft(180);
+  delay(300);
+  stopMotors();
+  delay(500);
+}
+
+// ====================== MOTOR CONTROL ======================
+void motorLeft(int speed, bool isForward) {
+  speed = constrain(speed, 0, 255);
+  digitalWrite(M1_FORWARD, isForward ? HIGH : LOW);
+  digitalWrite(M1_BACKWARD, isForward ? LOW : HIGH);
+  analogWrite(M1_ENABLE, speed);
+}
+
+void motorRight(int speed, bool isForward) {
+  speed = constrain(speed, 0, 255);
+  digitalWrite(M2_FORWARD, isForward ? HIGH : LOW);
+  digitalWrite(M2_BACKWARD, isForward ? LOW : HIGH);
+  analogWrite(M2_ENABLE, speed);
+}
+
+void forwardMove(int speed = SPEED_NORMAL) {
+  motorLeft(speed, true);
+  motorRight(speed, true);
+}
+
+void backwardMove(int speed = SPEED_NORMAL) {
+  motorLeft(speed, false);
+  motorRight(speed, false);
+}
+
+void turnRight(int speed = SPEED_TURN) {
+  motorLeft(speed, true);
+  motorRight(speed, false);
+}
+
+void turnLeft(int speed = SPEED_TURN) {
+  motorLeft(speed, false);
+  motorRight(speed, true);
+}
+
+void pivotRight() {
+  motorLeft(SPEED_TURN + 30, true);
+  motorRight(SPEED_TURN + 30, true);
+  delay(60);
+  motorLeft(SPEED_TURN + 30, true);
+  motorRight(SPEED_TURN + 30, false);
+}
+
+void pivotLeft() {
+  motorLeft(SPEED_TURN + 30, false);
+  motorRight(SPEED_TURN + 30, false);
+  delay(60);
+  motorLeft(SPEED_TURN + 30, false);
+  motorRight(SPEED_TURN + 30, true);
+}
+
+void stopMotors() {
+  analogWrite(M1_ENABLE, 0);
+  analogWrite(M2_ENABLE, 0);
+}
+
+// ====================== SENSOR FUNCTIONS ======================
+float readSensor(int trigPin, int echoPin) {
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+  
+  long duration = pulseIn(echoPin, HIGH, 12000);
+  
+  if (duration == 0) {
+    return 200.0;
+  }
+  
+  float distance = duration * 0.0343 / 2.0;
+  
+  if (distance < 2.0 || distance > 200.0) {
+    return 200.0;
+  }
+  
+  return distance;
+}
+
+void readAllSensors(float &left, float &center, float &right) {
+  right = readSensor(TRIG_RIGHT, ECHO_RIGHT);
+  delayMicroseconds(100);
+  left = readSensor(TRIG_LEFT, ECHO_LEFT);
+  delayMicroseconds(100);
+  center = readSensor(TRIG_CENTER, ECHO_CENTER);
+}
+
+// ====================== OPPONENT ANALYSIS ======================
+void analyzeOpponent(float left, float center, float right) {
+  static float prevDistance = 0;
+  static unsigned long prevTime = 0;
+  
+  float minDist = 200.0;
+  int side = 0;
+  
+  if (center < minDist && center < DIST_LOST) {
+    minDist = center;
+    side = 0;
+  }
+  if (left < minDist && left < DIST_LOST) {
+    minDist = left;
+    side = -1;
+  }
+  if (right < minDist && right < DIST_LOST) {
+    minDist = right;
+    side = 1;
+  }
+  
+  opponentDistance = minDist;
+  opponentSide = side;
+  
+  opponentFound = (minDist < DIST_LOST);
+  opponentClose = (minDist < DIST_ATTACK);
+  opponentVeryClose = (minDist < DIST_CLOSE);
+  
+  if (side == 0 && prevTime > 0 && opponentDistance < DIST_FAR) {
+    unsigned long currentTime = millis();
+    float timeDiff = (currentTime - prevTime) / 1000.0;
+    
+    if (timeDiff > 0.05) {
+      opponentSpeed = (opponentDistance - prevDistance) / timeDiff;
+    }
+    
+    prevDistance = opponentDistance;
+    prevTime = currentTime;
+  }
+  
+  if (opponentFound) {
+    lastOpponentSide = opponentSide;
+    lostTimer = millis();
+  }
+}
+
+// ====================== BEHAVIORS ======================
+
+// 1. SEARCH
+void behaviorSearch() {
+  unsigned long currentTime = millis();
+  
+  if (currentTime - searchTimer > TIME_SEARCH_CHANGE) {
+    searchPattern = (searchPattern + 1) % 5;
+    searchTimer = currentTime;
+  }
+  
+  switch(searchPattern) {
+    case 0:
+      turnRight(SPEED_SEARCH);
+      break;
+      
+    case 1:
+      turnLeft(SPEED_SEARCH);
+      break;
+      
+    case 2:
+      forwardMove(SPEED_SEARCH - 20);
+      delay(350);
+      break;
+      
+    case 3:
+      stopMotors();
+      delay(150);
+      break;
+      
+    case 4:
+      turnRight(SPEED_SEARCH + 20);
+      delay(600);
+      break;
+  }
+}
+
+// 2. ALIGN
+void behaviorAlign() {
+  float diff = 0;
+  
+  float left = readSensor(TRIG_LEFT, ECHO_LEFT);
+  float right = readSensor(TRIG_RIGHT, ECHO_RIGHT);
+  
+  diff = left - right;
+  
+  if (opponentSide == 1 || diff > 12) {
+    turnRight(SPEED_TURN + 30);
+    delay(100);
+  } 
+  else if (opponentSide == -1 || diff < -12) {
+    turnLeft(SPEED_TURN + 30);
+    delay(100);
+  }
+  else if (diff > 5) {
+    turnRight(SPEED_TURN);
+    delay(60);
+  }
+  else if (diff < -5) {
+    turnLeft(SPEED_TURN);
+    delay(60);
+  }
+  else {
+    forwardMove(SPEED_ATTACK - 20);
+    delay(120);
+  }
+}
+
+// 3. ATTACK
+void behaviorAttack() {
+  attackPattern = (attackPattern + 1) % 4;
+  
+  switch(attackPattern) {
+    case 0:
+      forwardMove(SPEED_ATTACK);
+      delay(120);
+      break;
+      
+    case 1:
+      forwardMove(SPEED_ATTACK);
+      delay(80);
+      turnRight(SPEED_TURN + 40);
+      delay(50);
+      break;
+      
+    case 2:
+      forwardMove(SPEED_ATTACK);
+      delay(100);
+      backwardMove(SPEED_NORMAL);
+      delay(40);
+      break;
+      
+    case 3:
+      forwardMove(SPEED_ATTACK);
+      delay(90);
+      if (lastOpponentSide == 1) {
+        turnLeft(SPEED_TURN + 30);
+      } else {
+        turnRight(SPEED_TURN + 30);
+      }
+      delay(60);
+      break;
+  }
+  
+  attackTimer = millis();
+}
+
+// 4. TACTICAL ATTACK
+void behaviorTactical() {
+  backwardMove(SPEED_EVADE);
+  delay(180);
+  
+  if (lastOpponentSide == 1) {
+    pivotLeft();
+    delay(120);
+  } else if (lastOpponentSide == -1) {
+    pivotRight();
+    delay(120);
+  } else {
+    if (millis() % 2 == 0) {
+      pivotLeft();
+    } else {
+      pivotRight();
+    }
+    delay(100);
+  }
+  
+  forwardMove(SPEED_MAX);
+  delay(200);
+  
+  evadeTimer = millis();
+}
+
+// 5. EVADE
+void behaviorEvade() {
+  evadePattern = (evadePattern + 1) % 3;
+  
+  switch(evadePattern) {
+    case 0:
+      if (opponentSide == -1) {
+        turnRight(SPEED_EVADE + 20);
+      } else {
+        turnLeft(SPEED_EVADE + 20);
+      }
+      delay(120);
+      backwardMove(SPEED_EVADE);
+      delay(100);
+      break;
+      
+    case 1:
+      if (opponentSide == 1) {
+        turnLeft(SPEED_EVADE + 20);
+      } else {
+        turnRight(SPEED_EVADE + 20);
+      }
+      delay(120);
+      backwardMove(SPEED_EVADE);
+      delay(100);
+      break;
+      
+    case 2:
+      backwardMove(SPEED_MAX);
+      delay(160);
+      if (millis() % 2 == 0) {
+        pivotLeft();
+      } else {
+        pivotRight();
+      }
+      delay(140);
+      break;
+  }
+  
+  evadeTimer = millis();
+}
+
+// 6. COUNTER ATTACK
+void behaviorCounter() {
+  forwardMove(SPEED_MAX);
+  delay(180);
+  
+  if (lastOpponentSide == 1) {
+    turnLeft(SPEED_TURN + 50);
+    delay(80);
+  } else if (lastOpponentSide == -1) {
+    turnRight(SPEED_TURN + 50);
+    delay(80);
+  }
+  
+  delay(100);
+}
+
+// ====================== DECISION MAKING ======================
+void makeDecision(float left, float center, float right) {
+  if (center < DIST_DANGER || left < DIST_DANGER || right < DIST_DANGER) {
+    behaviorEvade();
+    return;
+  }
+  
+  if (center < DIST_CLOSE && opponentSpeed < -80) {
+    behaviorTactical();
+    return;
+  }
+  
+  if (center > DIST_DANGER && center < DIST_ATTACK) {
+    behaviorAttack();
+    return;
+  }
+  
+  if ((left < DIST_ALIGN || right < DIST_ALIGN) && center > DIST_ATTACK) {
+    behaviorAlign();
+    return;
+  }
+  
+  if (millis() - evadeTimer < TIME_COUNTER && millis() - evadeTimer > 100) {
+    behaviorCounter();
+    return;
+  }
+  
+  behaviorSearch();
+}
+
+// ====================== MAIN LOOP ======================
+void loop() {
+  unsigned long currentTime = millis();
+  
+  float leftDist, centerDist, rightDist;
+  readAllSensors(leftDist, centerDist, rightDist);
+  
+  analyzeOpponent(leftDist, centerDist, rightDist);
+  
+  makeDecision(leftDist, centerDist, rightDist);
+  
+  if (currentTime - loopTimer > 800) {
+    Serial.print("L:");
+    Serial.print(leftDist);
+    Serial.print(" C:");
+    Serial.print(centerDist);
+    Serial.print(" R:");
+    Serial.print(rightDist);
+    Serial.print(" S:");
+    Serial.print(opponentSide);
+    Serial.print(" V:");
+    Serial.println(opponentSpeed);
+    
+    loopTimer = currentTime;
+  }
+  
+  delay(15);
+}`;
+
+        // دالة تبديل التبويبات
+        function switchTab(tabName) {
+            // إخفاء جميع المحتويات
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // إزالة النشط من جميع التبويبات
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // إظهار المحتوى المحدد
+            document.getElementById(tabName).classList.add('active');
+            
+            // تفعيل التبويب المحدد
+            event.target.classList.add('active');
+        }
+
+        // دالة محاكاة الحساسات
+        function simulateSensor(side) {
+            const distances = {
+                left: Math.floor(Math.random() * 60) + 5,
+                center: Math.floor(Math.random() * 60) + 5,
+                right: Math.floor(Math.random() * 60) + 5
+            };
+            
+            // تفعيل الحساس المحدد
+            document.getElementById(`${side}-sensor`).classList.add('active');
+            
+            // تحديث المسافات
+            document.getElementById('left-distance').textContent = `${distances.left} سم`;
+            document.getElementById('center-distance').textContent = `${distances.center} سم`;
+            document.getElementById('right-distance').textContent = `${distances.right} سم`;
+            
+            // إزالة النشاط بعد ثانيتين
+            setTimeout(() => {
+                document.getElementById(`${side}-sensor`).classList.remove('active');
+            }, 2000);
+            
+            // عرض رسالة تحليل
+            let message = "";
+            if (distances[side] < 10) {
+                message = `⚠️ الخصم قريب جدًا (${distances[side]} سم)! تفعيل وضع التهرب.`;
+            } else if (distances[side] < 35) {
+                message = `🎯 الخصم في مدى الهجوم (${distances[side]} سم)! تفعيل وضع الهجوم.`;
+            } else if (distances[side] < 60) {
+                message = `🔍 الخصم في المدى (${distances[side]} سم)! تفعيل وضع المحاذاة.`;
+            } else {
+                message = `🔎 لم يتم اكتشاف خصم قريب (${distances[side]} سم). البقاء في وضع البحث.`;
+            }
+            
+            alert(message);
+        }
+
+        // دالة إعادة تعيين الحساسات
+        function resetSensors() {
+            document.querySelectorAll('.sensor').forEach(sensor => {
+                sensor.classList.remove('active');
+            });
+            
+            document.getElementById('left-distance').textContent = '-- سم';
+            document.getElementById('center-distance').textContent = '-- سم';
+            document.getElementById('right-distance').textContent = '-- سم';
+        }
+
+        // دالة تحكم المحركات
+        function controlMotor(action) {
+            const leftMotor = document.getElementById('left-motor');
+            const rightMotor = document.getElementById('right-motor');
+            const leftSpeed = document.getElementById('left-speed');
+            const rightSpeed = document.getElementById('right-speed');
+            
+            // إزالة النشاط من جميع الأزرار
+            document.querySelectorAll('.sim-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // تفعيل الزر المحدد
+            event.target.classList.add('active');
+            
+            // إيقاف أي محركات نشطة
+            leftMotor.classList.remove('active');
+            rightMotor.classList.remove('active');
+            
+            let leftSpeedValue = 0;
+            let rightSpeedValue = 0;
+            
+            switch(action) {
+                case 'forward':
+                    leftMotor.classList.add('active');
+                    rightMotor.classList.add('active');
+                    leftSpeedValue = 200;
+                    rightSpeedValue = 200;
+                    break;
+                    
+                case 'backward':
+                    leftMotor.classList.add('active');
+                    rightMotor.classList.add('active');
+                    leftSpeedValue = 180;
+                    rightSpeedValue = 180;
+                    break;
+                    
+                case 'left':
+                    leftMotor.classList.add('active');
+                    leftSpeedValue = 150;
+                    rightSpeedValue = 0;
+                    break;
+                    
+                case 'right':
+                    rightMotor.classList.add('active');
+                    leftSpeedValue = 0;
+                    rightSpeedValue = 150;
+                    break;
+                    
+                case 'stop':
+                    leftSpeedValue = 0;
+                    rightSpeedValue = 0;
+                    break;
+            }
+            
+            leftSpeed.textContent = leftSpeedValue;
+            rightSpeed.textContent = rightSpeedValue;
+        }
+
+        // دالة نسخ الكود
+        function copyCode() {
+            const codeElement = document.getElementById('code-sample');
+            const codeText = codeElement.textContent;
+            
+            navigator.clipboard.writeText(codeText).then(() => {
+                alert('تم نسخ الكود بنجاح!');
+            }).catch(err => {
+                console.error('فشل نسخ الكود:', err);
+            });
+        }
+
+        // دالة عرض الكود الكامل
+        function showFullCode() {
+            document.getElementById('full-code-content').textContent = fullCode;
+            document.getElementById('code-modal').style.display = 'flex';
+        }
+
+        // دالة إغلاق نافذة الكود الكامل
+        function closeFullCode() {
+            document.getElementById('code-modal').style.display = 'none';
+        }
+
+        // دالة تحميل الملفات (محاكاة)
+        function downloadFile(type) {
+            let fileName = "";
+            let content = "";
+            
+            switch(type) {
+                case 'code':
+                    fileName = "Dyno_Robot.ino";
+                    content = fullCode;
+                    break;
+                    
+                case 'bom':
+                    fileName = "bom.csv";
+                    content = `Name,Quantity,Component
+U1,1,Arduino Uno R3
+DIST1,1,Ultrasonic Distance Sensor HC-SR04
+DIST2,1,Ultrasonic Distance Sensor HC-SR04
+DIST3,1,Ultrasonic Distance Sensor HC-SR04
+U2,1,L293D Motor Driver
+M1,1,Hobby Gearmotor 6V 100RPM
+M2,1,Hobby Gearmotor 6V 100RPM
+BAT1,1,9V Battery`;
+                    break;
+                    
+                case 'schematic':
+                    fileName = "Dyno_Robot.brd";
+                    content = "ملف التصميم يتطلب برنامج Autodesk EAGLE للفتح";
+                    alert("ملف .brd هو ملف تصميم لوحة الدوائر. يلزم برنامج Autodesk EAGLE لفتحه.");
+                    return;
+            }
+            
+            // محاكاة التحميل
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert(`تم بدء تحميل ملف ${fileName}`);
+        }
+
+        // تهيئة أولية
+        document.addEventListener('DOMContentLoaded', function() {
+            // عرض رسالة ترحيبية
+            setTimeout(() => {
+                alert("مرحبًا بك في توثيق مشروع روبوت السومو 'دينو'! استخدم أدوات المحاكاة لاختبار سلوك الروبوت.");
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
